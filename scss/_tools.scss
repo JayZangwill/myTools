@@ -1,15 +1,15 @@
-$lowIe: false !default; // 默认不兼容ie9
+$lowIe: true !default; // 默认不兼容ie9一下的
 //清除浮动
 %clearFix {
     @if ($lowIe) {
         *zoom: 1;
     }
     &:after {
-        height: 0;
-        visibility: hidden;
         overflow: hidden;
-        content: '';
         display: block;
+        visibility: hidden;
+        height: 0;
+        content: '';
         clear: both;
     }
 }
@@ -22,22 +22,6 @@ $lowIe: false !default; // 默认不兼容ie9
     white-space: nowrap;
 }
 
-//多行截断（仅移动端）
-@mixin lineClamp($line:2) {
-    display: -webkit-box;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: normal;
-    -webkit-line-clamp: $line;
-    -webkit-box-orient: vertical;
-}
-
-//自动添加高清图 
-@mixin imgSet($url, $urx2x) {
-    background-image: url($url);
-    background-image: img-set($url 1x, $url2x 2x);
-}
-
 //文本两端对齐
 %justify {
     text-align: justify;
@@ -46,17 +30,35 @@ $lowIe: false !default; // 默认不兼容ie9
 }
 
 //居中
-%horizontal-vertical-center {
+%center {
     position: absolute;
     top: 50%;
     left: 50%;
-    @if ($lowIe) {
-        margin-top: -50%;
-        margin-left: -50%;
-    }
-    @else {
-        transform: translate(-50%, -50%);
-    }
+    transform: translate(-50%, -50%);
+}
+
+%flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+%positionCenter {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@mixin marginCenter($width, $height) {
+    @extend %center;
+    margin-top: $width/2;
+    margin-left: $width/2;
+    width: $width;
+    height: $height;
 }
 
 //物理1px线
@@ -68,7 +70,7 @@ $lowIe: false !default; // 默认不兼容ie9
 }
 
 //三角
-@mixin triangle($size, $color, $direction='top') {
+@mixin triangle($size, $color, $direction:'top') {
     width: 0;
     height: 0;
     border: $size solid;
@@ -89,8 +91,34 @@ $lowIe: false !default; // 默认不兼容ie9
     }
 }
 
+//多行截断（仅移动端）
+@mixin lineClamp($line:2) {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: normal;
+    -webkit-line-clamp: $line;
+    -webkit-box-orient: vertical;
+}
+
+//半透明背景
+@mixin bgAlpha($color,$alpha) {
+	$rgba:$color;
+	background-color: rgba($rgba,$alpha);
+	@if($lowIe) {
+		$ieHexStr: ie-hex-str($rgba);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{$ieHexStr}, endColorstr=#{$ieHexStr});
+	}
+}
+
+//添加高清图 
+@mixin imgSet($url, $urx2x) {
+    background-image: url($url);
+    background-image: img-set($url 1x, $url2x 2x);
+}
+
 //移动端点击高亮
-@mixin highLight($color, $alpha=1) {
+@mixin highLight($color, $alpha:1) {
     -webkit-tap-highlight-color: rgba($color, $alpha);
 }
 
@@ -109,8 +137,8 @@ $lowIe: false !default; // 默认不兼容ie9
 }
 
 //区间
-@mixin section($minWidth, $maxWidth, $outer=false) {
-    @media screen and (max-width: if($outer, $maxWidth, $minWidth)) and (min-width: if($outer, $minWidth, $maxWidth)) {
+@mixin section($minWidth, $maxWidth) {
+    @media screen and (max-width: $maxWidth) and (min-width: $minWidth) {
         @content;
     }
 }
@@ -129,7 +157,7 @@ $lowIe: false !default; // 默认不兼容ie9
     }
 }
 
-@mixin retina($devicePixelRatio=2) {
+@mixin retina($devicePixelRatio:2) {
     @media screen and (-webkit-device-pixel-ratio: $devicePixelRatio) {
         @content;
     }
