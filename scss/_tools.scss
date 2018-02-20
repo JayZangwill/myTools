@@ -130,10 +130,29 @@ $lowIe: false !default; // 默认不兼容ie9一下的
 	}
 }
 
-//添加高清图 
-@mixin imgSet($url, $urx2x) {
+//自动添加高清图
+@mixin imgSet($url, $notDeep:true) {
+    $twoUrl: '';
+    @if($notDeep) {
+        $twoUrl: str-insert($url, '@2x', -5);
+    }
+    @else {
+        $dot: 0;
+        $string: $url;
+        @while ($string) {
+            $index: str-index($string, '.');
+            @if ($index) {
+                $dot: $dot + $index;
+                $string: str-slice($string, $index + 1);
+            }
+            @else {
+                $string: null;
+            }
+        }
+        $twoUrl: str-insert($url, '@2x', $dot);
+    }
     background-image: url($url);
-    background-image: img-set($url 1x, $url2x 2x);
+    background-image: image-set(url($url 1x), url($twoUrl 2x));
 }
 
 //移动端点击高亮
