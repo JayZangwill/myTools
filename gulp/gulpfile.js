@@ -2,12 +2,14 @@ var gulp = require('gulp'),
     htmlmin = require('gulp-htmlmin'),
     cleanCSS = require('gulp-clean-css'),
     autoprefixer = require('gulp-autoprefixer'),
-    sass = require("gulp-sass"),
+    sass = require('gulp-sass'),
     rename = require('gulp-rename'),
     browserSync = require('browser-sync').create(),
     uglify = require('gulp-uglify'),
     babel = require('gulp-babel'),
     del = require('del'),
+	plumber = require('gulp-plumber'),
+	notify = require('gulp-notify'),
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
     mozjpeg = require('imagemin-mozjpeg');
@@ -26,7 +28,8 @@ gulp.task('dev:css', function () {
     return gulp.src('src/css/**/*.{scss,css}')
         .pipe(sass({
             outputStyle: 'expanded'
-        }).on('error', sass.logError))
+        })
+		.on('error', sass.logError))
         .pipe(autoprefixer({
             browsers: ['iOS >= 8', 'last 2 versions', 'Android >= 4', 'ie >= 9'],
             cascade: false
@@ -37,9 +40,11 @@ gulp.task('dev:css', function () {
 
 gulp.task('dev:js', function () {
     gulp.src('src/js/**/*.js')
+        .pipe(plumber({
+            errorHandler: notify.onError('Error: <%= error.message %>')
+        }))
         .pipe(babel({
-            //			presets: ['env']
-            presets: ['es2015']
+            presets: ['es2015', 'env']
         }))
         .pipe(gulp.dest('dist/js'))
         .pipe(browserSync.stream());
@@ -81,7 +86,7 @@ gulp.task('dev:static:watch', ['dev:static'], function () {
 gulp.task('dev:browser', ['dev:css', 'dev:html', 'dev:js'], function () {
     browserSync.init({
         server: {
-            baseDir: "./dist",
+            baseDir: './dist',
             directory: true,
             middleware: function (req, res, next) {
                 res.setHeader('Access-Control-Allow-Origin', '*');
