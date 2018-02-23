@@ -1,9 +1,9 @@
-(function () {
+(function(window, document) {
     function Jay() {};
     Jay.prototype = {
         constructor: Jay,
         //获取dom
-        $: function (selector) {
+        $: function(selector) {
             if (selector.substr(0, 1) === '#') {
                 return document.getElementById(selector.slice(1));
             } else {
@@ -12,49 +12,61 @@
             }
         },
         //函数防抖
-        debounce: function (fn, delay, now) {
+        debounce: function(fn, delay, now) {
             var timer;
-            return function () {
+            return function() {
                 var self = this;
                 if (now) {
                     now = false;
                     fn.call(self);
                 }
                 clearTimeout(timer);
-                timer = setTimeout(function () {
+                timer = setTimeout(function() {
                     fn.call(self);
                 }, delay);
             }
         },
         //函数节流
-        throttle: function (fn, delay, time) {
+        throttle: function(fn, delay, time) {
             var timer,
                 oldTime = new Date(),
                 now;
-            return function () {
+            return function() {
                 var self = this;
                 if ((now = new Date()) - oldTime > time) {
                     fn.call(self);
                     oldTime = now;
                 }
                 clearTimeout(timer);
-                timer = setTimeout(function () {
+                timer = setTimeout(function() {
                     fn.call(self);
                 }, delay);
             }
         },
         //事件绑定
-        on: function (node, type, fn, option) {
+        on: function(node, type, fn, option) {
             option == undefined && (option = false);
             window.addEventListener ? node.addEventListener(type, fn, option) : node.attachEvent('on' +
                 type, fn);
         },
         //事件取消
-        off: function (node, type, fn, option) {
+        off: function(node, type, fn, option) {
             option == undefined && (option = false);
             window.removeEventListener ? node.removeEventListener(type, fn, option) : node.detachEvent('on' +
                 type, fn);
+        },
+        //触发事件
+        trigger: function(node, type) {
+            var event;
+            if (window.addEventListener) {
+                event = new Event(type);
+                node.dispatchEvent(event);
+            } else {
+                event = document.createEventObject();
+                event.eventType = 'message';
+                node.fireEvent('on' + type, event);
+            }
         }
     }
     window.jay = new Jay();
-})();
+})(window, document);
