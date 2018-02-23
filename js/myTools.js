@@ -4,7 +4,7 @@
         constructor: Jay,
         //获取dom
         $: function(selector) {
-            if (selector.substr(0, 1) === '#') {
+            if (selector[0] === '#') {
                 return document.getElementById(selector.slice(1));
             } else {
                 var node = document.querySelectorAll(selector);
@@ -58,7 +58,7 @@
         //触发事件
         trigger: function(node, type) {
             var event;
-            if (window.addEventListener) {
+            if (window.Event && typeof window.Event === 'function') {
                 event = new Event(type);
                 node.dispatchEvent(event);
             } else {
