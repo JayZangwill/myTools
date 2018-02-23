@@ -1,8 +1,10 @@
+'use strict';
+
 (function(window, document) {
-    function Jay() {};
+    function Jay(selector) {};
     Jay.prototype = {
         constructor: Jay,
-        //获取dom
+        //获取元素
         $: function(selector) {
             if (selector[0] === '#') {
                 return document.getElementById(selector.slice(1));
@@ -43,29 +45,10 @@
                 }, delay);
             }
         },
-        //事件绑定
-        on: function(node, type, fn, option) {
-            option == undefined && (option = false);
-            window.addEventListener ? node.addEventListener(type, fn, option) : node.attachEvent('on' +
-                type, fn);
-        },
-        //事件取消
-        off: function(node, type, fn, option) {
-            option == undefined && (option = false);
-            window.removeEventListener ? node.removeEventListener(type, fn, option) : node.detachEvent('on' +
-                type, fn);
-        },
-        //触发事件
-        trigger: function(node, type) {
-            var event;
-            if (window.Event && typeof window.Event === 'function') {
-                event = new Event(type);
-                node.dispatchEvent(event);
-            } else {
-                event = document.createEventObject();
-                event.eventType = 'message';
-                node.fireEvent('on' + type, event);
-            }
+        //判断类型
+        nativeType: function(obj) {
+            var type = typeof obj;
+            return type === 'object' ? {}.toString.call(obj) : type;
         }
     }
     window.jay = new Jay();
