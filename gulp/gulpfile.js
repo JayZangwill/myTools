@@ -106,7 +106,7 @@ gulp.task('build:html', ['del'], function () {
 
 gulp.task('build:css', ['del'], function () {
     return gulp.src('src/css/**/*.{scss,css}')
-        //		.pipe(sass().on('error', sass.logError))
+        .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
             browsers: ['iOS >= 8', 'last 2 versions', 'Android >= 4', 'ie >= 9'],
             cascade: false
@@ -120,9 +120,9 @@ gulp.task('build:css', ['del'], function () {
 
 gulp.task('build:js', ['del'], function () {
     gulp.src('src/js/**/*.js')
-        //		.pipe(babel({
-        //			presets: ['env']
-        //		}))
+        .pipe(babel({
+        	presets: ['es2015','env']
+        }))
         .pipe(uglify())
         .pipe(rename({
             suffix: '.min'
