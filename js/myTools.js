@@ -84,7 +84,7 @@
             if (option == undefined || this.nativeType(option.url) !== 'string') {
                 return;
             }
-            this.nativeType(option.succss) !== 'function' && console.warn('missing succss function or success is no a function');
+            this.nativeType(option.success) !== 'function' && console.warn('missing succss function or success is no a function');
             var xhr = new XMLHttpRequest(),
                 url = option.url,
                 type = option.type || 'get',
@@ -109,7 +109,7 @@
                     random = ('' + Math.random() + Math.random()).replace(/0\./g, '_');
                 script.src = url + '&' + callbackName + '=jayTools' + random;
                 document.body.appendChild(script);
-                window['jayTools' + random] = option.succss;
+                window['jayTools' + random] = option.success;
                 document.body.removeChild(script);
                 return;
             }
@@ -117,7 +117,7 @@
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
-                        option.succss.call(this, dataType === 'json' ? xhr.response : dataType === 'xml' ? xhr.responseXML : xhr.responseText);
+                        option.success.call(this, dataType === 'json' ? xhr.response : dataType === 'xml' ? xhr.responseXML : xhr.responseText);
                     } else {
                         option.error && option.error.call(this, xhr.status, xhr.statusText);
                     }
