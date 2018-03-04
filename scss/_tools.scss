@@ -1,4 +1,4 @@
-$lowIe: false !default; // 默认不兼容ie9一下的
+$lowIe: false !default; // 默认不兼容ie9以下的
 //清除浮动
 %clearFix {
     @if ($lowIe) {
