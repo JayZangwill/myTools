@@ -8,12 +8,12 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     babel = require('gulp-babel'),
     del = require('del'),
-	plumber = require('gulp-plumber'),
-	notify = require('gulp-notify'),
+    plumber = require('gulp-plumber'),
+    notify = require('gulp-notify'),
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
-    mozjpeg = require('imagemin-mozjpeg');
-
+    mozjpeg = require('imagemin-mozjpeg'),
+    port = require('minimist')(process.argv.splice(2)).p;
 gulp.task('del', function () {
     return del('dist');
 });
@@ -27,9 +27,9 @@ gulp.task('dev:html', function () {
 gulp.task('dev:css', function () {
     return gulp.src('src/css/**/*.{scss,css}')
         .pipe(sass({
-            outputStyle: 'expanded'
-        })
-		.on('error', sass.logError))
+                outputStyle: 'expanded'
+            })
+            .on('error', sass.logError))
         .pipe(autoprefixer({
             browsers: ['iOS >= 8', 'last 2 versions', 'Android >= 4', 'ie >= 9'],
             cascade: false
@@ -83,6 +83,7 @@ gulp.task('dev:static:watch', ['dev:static'], function () {
     return gulp.watch('src/static/**/*', ['dev:static']);
 });
 
+
 gulp.task('dev:browser', ['dev:css', 'dev:html', 'dev:js'], function () {
     browserSync.init({
         server: {
@@ -92,7 +93,8 @@ gulp.task('dev:browser', ['dev:css', 'dev:html', 'dev:js'], function () {
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 next();
             }
-        }
+        },
+        port: typeof port === 'number' ? port : port === true ? Math.floor(Math.random() * 9999) : 3000
     });
 });
 
@@ -121,7 +123,7 @@ gulp.task('build:css', ['del'], function () {
 gulp.task('build:js', ['del'], function () {
     gulp.src('src/js/**/*.js')
         .pipe(babel({
-        	presets: ['es2015','env']
+            presets: ['es2015', 'env']
         }))
         .pipe(uglify())
         .pipe(rename({

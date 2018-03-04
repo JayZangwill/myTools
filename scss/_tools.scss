@@ -52,25 +52,25 @@ $lowIe: false !default; // 默认不兼容ie9一下的
     margin: auto;
 }
 
-@mixin imgCenter($width,$height) {
-	position: relative;
-	overflow: hidden;
-	width: $width;
-	height: $height;
-	@if($lowIe){
-		*text-align: center;
-		*line-height: $height;
-		*font-size: floor($height / 1.14);
-	}
-	img {
-		@extend %positionCenter;
-		max-width: $width;
-		max-height: $height;
-		if($lowIe) {
-			*position: static;
-			*vertical-align:middle;
-		}
-	}
+@mixin imgCenter($width, $height) {
+    position: relative;
+    overflow: hidden;
+    width: $width;
+    height: $height;
+    @if($lowIe) {
+        *text-align: center;
+        *line-height: $height;
+        *font-size: floor($height / 1.14);
+    }
+    img {
+        @extend %positionCenter;
+        max-width: $width;
+        max-height: $height;
+        if($lowIe) {
+            *position: static;
+            *vertical-align: middle;
+        }
+    }
 }
 
 @mixin marginCenter($width, $height) {
@@ -121,13 +121,22 @@ $lowIe: false !default; // 默认不兼容ie9一下的
 }
 
 //半透明背景
-@mixin bgAlpha($color,$alpha) {
-	$rgba:$color;
-	background-color: rgba($rgba,$alpha);
-	@if($lowIe) {
-		$ieHexStr: ie-hex-str($rgba);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#{$ieHexStr}, endColorstr=#{$ieHexStr});
-	}
+@mixin bgAlpha($color, $alpha) {
+    $rgba: rgba($color, $alpha);
+    background-color: $rgba;
+    @if($lowIe) {
+        $ieHexStr: ie-hex-str($rgba);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#{$ieHexStr}', endColorstr='#{$ieHexStr}');
+    }
+}
+
+//背景缩放
+@mixin bgScale ($url) {
+    background-size: cover;
+    if($lowIe) {
+        background-image: none\9;
+        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=$url, sizingMethod='scale')\9;
+    }
 }
 
 //自动添加高清图

@@ -1,11 +1,11 @@
 'use strict';
 
-(function(window, document) {
+(function (window, document) {
     function Jay(selector) {};
     Jay.prototype = {
         constructor: Jay,
         //获取元素
-        $: function(selector) {
+        $: function (selector) {
             if (selector[0] === '#') {
                 return document.getElementById(selector.slice(1));
             } else {
@@ -14,39 +14,39 @@
             }
         },
         //函数防抖
-        debounce: function(fn, delay, now) {
+        debounce: function (fn, delay, now) {
             var timer;
-            return function() {
+            return function () {
                 var self = this;
                 if (now) {
                     now = false;
                     fn.call(self);
                 }
                 clearTimeout(timer);
-                timer = setTimeout(function() {
+                timer = setTimeout(function () {
                     fn.call(self);
                 }, delay);
             }
         },
         //函数节流
-        throttle: function(fn, delay, time) {
+        throttle: function (fn, delay, time) {
             var timer,
                 oldTime = new Date(),
                 now;
-            return function() {
+            return function () {
                 var self = this;
                 if ((now = new Date()) - oldTime > time) {
                     fn.call(self);
                     oldTime = now;
                 }
                 clearTimeout(timer);
-                timer = setTimeout(function() {
+                timer = setTimeout(function () {
                     fn.call(self);
                 }, delay);
             }
         },
         //判断类型
-        nativeType: function(obj) {
+        nativeType: function (obj) {
             var type = typeof obj;
             if (type === 'object') {
                 var objType = {}.toString.call(obj);
@@ -55,7 +55,7 @@
             return type;
         },
         //获取url参数
-        getParameter: function(url, key) {
+        getParameter: function (url, key) {
             var paramate = {};
             if (url === true) {
                 url = window.location.search;
@@ -64,7 +64,8 @@
             }
             if (this.nativeType(key) === 'array') {
                 for (var i = key.length; i--;) {
-                    new RegExp('(?:[?|&])' + key[i] + '=([^&]*)', 'ig').test(url) && (paramate[key[i]] = RegExp.$1);
+                    new RegExp('(?:[?|&])' + key[i] + '=([^&]*)', 'ig').test(url) && (paramate[key[i]] =
+                        RegExp.$1);
                 }
                 return paramate;
             } else if (this.nativeType(key) === 'string') {
@@ -80,11 +81,12 @@
 
         },
         //ajax
-        ajax: function(option) {
+        ajax: function (option) {
             if (option == undefined || this.nativeType(option.url) !== 'string') {
                 return;
             }
-            this.nativeType(option.success) !== 'function' && console.warn('missing succss function or success is no a function');
+            this.nativeType(option.success) !== 'function' && console.warn(
+                'missing succss function or success is no a function');
             var xhr = new XMLHttpRequest(),
                 url = option.url,
                 type = option.type || 'get',
@@ -114,10 +116,11 @@
                 return;
             }
             xhr.responseType = dataType;
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
-                        option.success.call(this, dataType === 'json' ? xhr.response : dataType === 'xml' ? xhr.responseXML : xhr.responseText);
+                        option.success.call(this, dataType === 'json' ? xhr.response : dataType ===
+                            'xml' ? xhr.responseXML : xhr.responseText);
                     } else {
                         option.error && option.error.call(this, xhr.status, xhr.statusText);
                     }
@@ -125,6 +128,21 @@
             }
             xhr.open(type, url, true);
             type === 'get' ? xhr.send(null) : xhr.send(data), xhr.contentType = contentType;
+        },
+        //对象合并
+        objMerge: function (target, obj) {
+            for (var key in obj) {
+                target[key] && this.nativeType(target[key]) === 'object' ? this.objMerge(target[key], obj[
+                    key]) : target[key] = obj[key];
+            }
+            return target;
+        },
+        //判断对象是否相等
+        objEqual: function (target, obj) {
+            if (target === obj) {
+                return true;
+            }
+            return JSON.stringify(target) === JSON.stringify(obj);
         }
     }
     window.jay = new Jay();
