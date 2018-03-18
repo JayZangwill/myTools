@@ -143,6 +143,30 @@
                 return true;
             }
             return JSON.stringify(target) === JSON.stringify(obj);
+        },
+        //对象拷贝
+        clone: function (obj, deep) {
+            var result = {};
+            if (this.nativeType(obj) !== 'object') {
+                return;
+            }
+            if (deep) {
+                result = JSON.parse(JSON.stringify(obj));
+            } else {
+                for (var key in obj) {
+                    result[key] = obj[key];
+                }
+            }
+            return result;
+        },
+        //在节点后插入
+        insertAfter: function (target, node) {
+            if (target.nodeType!==1 || node.nodeType !== 1) {
+                throw TypeError(target + 'or' + node + 'is no a html node!');
+            }
+            var next = target.nextSibling,
+                parent = target.parentNode;
+            next ? parent.insertBefore(node, next) : parent.appendChild(node);
         }
     }
     window.jay = new Jay();
