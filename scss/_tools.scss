@@ -51,21 +51,27 @@ $lowIe: false !default; // 默认不兼容ie9以下的
     margin: auto;
 }
 
+//文字渐变
+@mixin textGradient($top, $bottom, $position:30%) {
+    background: linear-gradient(to bottom, $top $position, $bottom);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
 @mixin transformCenter() {
     @extend %center;
     transform: translate(-50%, -50%);
 }
 
 @mixin positionCenter($width, $height) {
-	@extend %positionCenter;
+    @extend %positionCenter;
     @if($lowIe) {
-		*top: 50%;
-		*left: 50%;
+        *top: 50%;
+        *left: 50%;
         *margin-top: -$height/2;
         *margin-left: -$width/2;
-    }@else {
-		
-	}
+    }
+    @else {}
     width: $width;
     height: $height;
 }
@@ -84,7 +90,7 @@ $lowIe: false !default; // 默认不兼容ie9以下的
         @extend %positionCenter;
         max-width: $width;
         max-height: $height;
-        if($lowIe) {
+        @if($lowIe) {
             *position: static;
             *vertical-align: middle;
         }
@@ -151,7 +157,7 @@ $lowIe: false !default; // 默认不兼容ie9以下的
 //背景缩放
 @mixin bgScale ($url) {
     background-size: cover;
-    if($lowIe) {
+    @if($lowIe) {
         background-image: none\9;
         filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=$url, sizingMethod='scale')\9;
     }
@@ -227,6 +233,7 @@ $lowIe: false !default; // 默认不兼容ie9以下的
         @content;
     }
 }
+
 $lowIe: false !default; // 默认不兼容ie9以下的
 //清除浮动
 %clearFix {
@@ -286,15 +293,14 @@ $lowIe: false !default; // 默认不兼容ie9以下的
 }
 
 @mixin positionCenter($width, $height) {
-	@extend %positionCenter;
+    @extend %positionCenter;
     @if($lowIe) {
-		*top: 50%;
-		*left: 50%;
+        *top: 50%;
+        *left: 50%;
         *margin-top: -$height/2;
         *margin-left: -$width/2;
-    }@else {
-		
-	}
+    }
+    @else {}
     width: $width;
     height: $height;
 }
@@ -313,7 +319,7 @@ $lowIe: false !default; // 默认不兼容ie9以下的
         @extend %positionCenter;
         max-width: $width;
         max-height: $height;
-        if($lowIe) {
+        @if($lowIe) {
             *position: static;
             *vertical-align: middle;
         }
@@ -380,7 +386,7 @@ $lowIe: false !default; // 默认不兼容ie9以下的
 //背景缩放
 @mixin bgScale ($url) {
     background-size: cover;
-    if($lowIe) {
+    @if($lowIe) {
         background-image: none\9;
         filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=$url, sizingMethod='scale')\9;
     }
@@ -456,6 +462,7 @@ $lowIe: false !default; // 默认不兼容ie9以下的
         @content;
     }
 }
+
 $lowIe: false !default; // 默认不兼容ie9以下的
 //清除浮动
 %clearFix {
@@ -515,10 +522,10 @@ $lowIe: false !default; // 默认不兼容ie9以下的
 }
 
 @mixin positionCenter($width, $height) {
-	@extend %positionCenter;
+    @extend %positionCenter;
     @if($lowIe) {
-		*top: 50%;
-		*left: 50%;
+        *top: 50%;
+        *left: 50%;
         *margin-top: -$height/2;
         *margin-left: -$width/2;
     }
@@ -540,7 +547,7 @@ $lowIe: false !default; // 默认不兼容ie9以下的
         @extend %positionCenter;
         max-width: $width;
         max-height: $height;
-        if($lowIe) {
+        @if($lowIe) {
             *position: static;
             *vertical-align: middle;
         }
@@ -607,7 +614,7 @@ $lowIe: false !default; // 默认不兼容ie9以下的
 //背景缩放
 @mixin bgScale ($url) {
     background-size: cover;
-    if($lowIe) {
+    @if($lowIe) {
         background-image: none\9;
         filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=$url, sizingMethod='scale')\9;
     }
