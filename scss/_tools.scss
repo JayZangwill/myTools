@@ -650,6 +650,11 @@ $lowIe: false !default; // 默认不兼容ie9以下的
     -webkit-tap-highlight-color: rgba($color, $alpha);
 }
 
+//ios滑动
+@mixin scrolling() {
+    -webkit-overflow-scrolling: touch;
+}
+
 //小屏
 @mixin minScreen($width) {
     @media screen and (max-width: $width) {
