@@ -1,7 +1,7 @@
 'use strict';
 
 (function (window, document, undefined) {
-  function Jay (selector) {}
+  function Jay () {}
   Jay.prototype = {
     constructor: Jay,
     //获取元素
@@ -14,18 +14,35 @@
       }
     },
     //函数防抖
-    debounce: function (fn, delay, now) {
-      var timer;
+    debounce: function (func, wait, immediate) {
+      var timer = null, context, parama, result;
+
+      function _timingGenerator () {
+        return setTimeout (function () {
+          timer = null;
+
+          if (!immediate) {
+            result = func.apply (context, parama);
+            context = parama = undefined
+          }
+        }, wait);
+      }
+
       return function () {
-        var self = this;
-        if (now) {
-          now = false;
-          fn.call (self);
+        if (!immediate) {
+          if (timer) {
+            clearTimeout (timer);
+          } else {
+            context = this;
+            parama = arguments;
+          }
+          timer = _timingGenerator ();
+        } else {
+          timer ? clearTimeout (timer) : (result = func.apply (this, arguments));
+          timer = _timingGenerator ();
         }
-        clearTimeout (timer);
-        timer = setTimeout (function () {
-          fn.call (self);
-        }, delay);
+
+        return result
       };
     },
     //函数节流
