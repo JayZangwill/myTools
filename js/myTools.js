@@ -266,10 +266,10 @@ class Jay {
       return node.length > 1 ? node : node[0];
     }
   }
-  debounce(fn, delay, immediate = true) {
+  debounce(fn, delay, immediate) {
     let timer
 
-    return function() {
+    function _debounce() {
       if (timer) {
         clearTimeout(timer)
       }
@@ -286,6 +286,12 @@ class Jay {
         }, delay)
       }
     }
+
+    _debounce.cancel = () => {
+      clearTimeout(timer)
+    }
+
+    return _debounce
   }
 }
 
