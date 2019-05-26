@@ -1,3 +1,6 @@
 gulp/dist
 gulp/node_modules
 gulp/src
+js/node_modules
+js/yarn.lock
+js/dist

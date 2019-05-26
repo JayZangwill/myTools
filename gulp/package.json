@@ -7,7 +7,7 @@
     "test": ""
   },
   "keywords": [],
-  "author": "info teach lab",
+  "author": "Jay Zangwill",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -1,0 +1,24 @@
+{
+  "name": "rullup",
+  "version": "1.0.0",
+  "description": "",
+  "module": "dist/ice.esm.js",
+  "browser": "dist/ice.umd.js",
+  "scripts": {
+    "dev": "rollup -w --config rollup.config.js",
+    "prod": "rollup --config rollup.config.js"
+  },
+  "keywords": [],
+  "author": "Jay Zangwill",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^3.4.0"
+  },
+  "dependencies": {
+    "es6-promise": "^4.2.5"
+  }
+}
