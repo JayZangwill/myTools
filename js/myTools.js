@@ -9,8 +9,9 @@ class Jay {
     }
   }
   // 函数防抖
-  debounce (fn, delay, immediate) {
+  debounce (fn, delay = 300, immediate = true) {
     let timer;
+    let complete // 处理fn报错
 
     function _debounce () {
       if (timer) {
@@ -18,11 +19,15 @@ class Jay {
       }
 
       if (immediate) {
-        !timer && fn.apply (this, arguments);
-
         timer = setTimeout (() => {
           timer = null;
+          complete = false
         }, delay);
+
+        if (!complete) {
+          complete = true
+          fn.apply (this, arguments);
+        }
       } else {
         timer = setTimeout (() => {
           fn.apply (this, arguments);
