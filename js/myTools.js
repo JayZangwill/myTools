@@ -41,6 +41,22 @@ class Jay {
 
     return _debounce;
   }
+  
+  // 函数节流
+  throttle (fn, delay = 1000) {
+    let timer
+
+    return function() {
+      if (timer) {
+        return
+      }
+
+      timer = setTimeout(() => {
+        fn.apply(this, arguments)
+        timer = null
+      }, delay)
+    }
+  }
 
   nativeType (type) {
     return typeof type !== 'object'
