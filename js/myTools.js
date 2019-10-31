@@ -124,6 +124,30 @@ class Jay {
 
     return scrollHeight - scrollTop - height <= offsetHeight;
   }
+
+  deepClone(obj, map = new WeakMap()) {
+    if (typeof obj !== 'object' || obj == null || typeof obj === 'function') {
+      return obj
+    }
+    
+    const result = Array.isArray(obj) ? [] : {}
+
+    if (map.get(obj)) {
+      return map.get(obj)
+    }
+    
+    map.set(obj, result)
+    
+    for (let key in obj) {
+      if (obj[key] && typeof obj[key] === 'object') {
+        result[key] = this.deepClone(obj[key], map)
+      } else {
+        result[key] = obj[key]
+      }
+    }
+
+    return result
+  }
 }
 
 export default new Jay ();
