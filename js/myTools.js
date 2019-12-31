@@ -41,7 +41,7 @@ class Jay {
 
     return _debounce;
   }
-  
+
   // 函数节流
   throttle (fn, delay = 1000) {
     let timer
@@ -119,7 +119,7 @@ class Jay {
 
     const isDocument = dom === document
     const scrollTop = isDocument ? document.documentElement.scrollTop || document.body.scrollTop : dom.scrollTop // 滚动条位置
-    const scrollHeight = isDocument ? document.documentElement.scrollHeight || document.body.scrollHeight : dom.scrollHeight // 总高度 
+    const scrollHeight = isDocument ? document.documentElement.scrollHeight || document.body.scrollHeight : dom.scrollHeight // 总高度
     const offsetHeight = isDocument ? document.documentElement.clientHeight : dom.offsetHeight // 可视区域高度
 
     return scrollHeight - scrollTop - height <= offsetHeight;
@@ -129,15 +129,15 @@ class Jay {
     if (typeof obj !== 'object' || obj == null || typeof obj === 'function') {
       return obj
     }
-    
+
     const result = Array.isArray(obj) ? [] : {}
 
     if (map.get(obj)) {
       return map.get(obj)
     }
-    
+
     map.set(obj, result)
-    
+
     for (let key in obj) {
       if (obj[key] && typeof obj[key] === 'object') {
         result[key] = this.deepClone(obj[key], map)
@@ -147,6 +147,16 @@ class Jay {
     }
 
     return result
+  }
+
+  curry(fn, ...arg) {
+    const self = this
+
+    return function () {
+      const args = arg.concat(...arguments)
+
+      return fn.length > args.length ? self.curry.call(self, fn, ...args) : fn.apply(self, args)
+    }
   }
 }
 
