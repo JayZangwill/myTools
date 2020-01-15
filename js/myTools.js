@@ -148,6 +148,10 @@ class Jay {
 
     return result
   }
+
+  checkCross({ clientY, clientX, top, bottom, left, width }) {
+    return clientY > top && clientY < bottom && clientX < left + width && clientX > left
+  }
 }
 
 export default new Jay ();
