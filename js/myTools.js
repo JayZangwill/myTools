@@ -162,6 +162,19 @@ class Jay {
       return fn.length > args.length ? self.curry.call(self, fn, ...args) : fn.apply(self, args)
     }
   }
+
+  radianAndAngle(a, b, c) {
+    const cosVal = (a * a + b * b - c * c)/(2 * a * b)
+    // 求弧度
+    const radVal = Math.acos(cosVal)
+    // 求角度
+    const angle = radVal / Math.PI * 180
+
+    return {
+      radVal,
+      angle
+    }
+  }
 }
 
 export default new Jay ();
